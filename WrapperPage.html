@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advent Of Code 2022</title>
+</head>
+<body>
+    <style>
+        table, th, td {
+            padding: 5px;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        table {
+            margin-top: .5em;
+        }
+        td, th {
+            text-align: center;
+        }
+    </style>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Puzzle [Day.Part]</th>
+                <th>With Sample Data</th>
+                <th>With Full Data</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <template id='tableRow'>
+        <tr>
+            <td class="puzzle"></td>
+            <td>
+                <button>Solve</button>
+            </td>
+            <td>
+                <button>Solve</button>
+            </td>
+            <td></td>
+        </tr>
+    </template>    
+    <script>
+        async function runSolution(event) {
+            let buttonClicked = event.target;
+            let puzzle = buttonClicked.closest('tr').querySelector('.puzzle').innerText;
+            let fileName = 'Day' + puzzle.split('.')[0];
+            let buttons = buttonClicked.closest('tr').querySelectorAll('button');
+            if (buttonClicked == buttons[1]) {
+                fileName = fileName + 'Input.txt';
+            }
+            if (buttonClicked == buttons[0]) {
+                fileName = fileName + 'SampleInput.txt';
+            }
+            let input = await fetch(fileName);
+            let inputData = await input.text();
+            let functionName = 'day' + puzzle.split('.')[0] + 'Solution' + puzzle.split('.')[1];
+            eval(`drawSolutionToTable(${functionName}(inputData), buttonClicked.closest('tr'))`);
+        }
+
+        function drawSolutionToTable(result, tableRow) {
+            let solutionCells = tableRow.querySelectorAll('td');
+            let solutionCell = solutionCells[solutionCells.length - 1];
+            solutionCell.innerText = result;
+            solutionCell.style.color = 'red';
+        }
+
+        function addScripts() {
+            const template = document.getElementById('tableRow');
+            for (let day = 1; day <= 25; day++) {
+                for (let part = 1; part <= 2; part++) {
+                    let scriptElem = document.createElement('script');
+                    scriptElem.src = "/Day" + day + "Solution" + part + ".js"
+                    document.head.appendChild(scriptElem);
+                    let newTableRow = template.content.cloneNode(true);
+                    let buttons = newTableRow.querySelectorAll('button');
+                    for (let button of buttons) {
+                        button.addEventListener('click', runSolution);
+                    }
+                    newTableRow.querySelector('.puzzle').innerText = day + '.' + part;
+                    document.querySelector('tbody').appendChild(newTableRow);
+                }
+            }
+        }
+
+        addScripts();
+    </script>
+</body>
+</html>
