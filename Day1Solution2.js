@@ -20,7 +20,6 @@ function day1Solution2(data) {
                 firstNumWord = num;
             }
             if (lastNumWordIndex === undefined || numWordIndexLast > lastNumWordIndex) {
-                console.log(num, numWordIndexLast)
                 lastNumWordIndex = numWordIndexLast;
                 lastNumWord = num;
             }

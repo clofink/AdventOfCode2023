@@ -14,7 +14,6 @@ function day3Solution2(data) {
             }
         }
     }
-    console.log(count)
     return total;
 
     function isNum(char) {
