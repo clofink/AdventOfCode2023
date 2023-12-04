@@ -4,13 +4,11 @@ function day4Solution2(data) {
     const cardByNum = {}
     for (let i = data.length - 1; i >= 0; i--) {
         const line = data[i];
-        let card = line.split(": ")[0].split(" ")
-        card = parseInt(card[card.length - 1], 10);
-        const cardNums = line.split(": ")[1].split(" | ")[0].split(" ");
-        const myNums = line.split(": ")[1].split(" | ")[1].split(" ");
+        const card = parseInt(line.split(/:\s+/)[0].split(/\s+/)[1], 10);
+        const cardNums = line.split(/:\s+/)[1].split(/\s+\|\s+/)[0].split(/\s+/);
+        const myNums = line.split(/:\s+/)[1].split(/\s+\|\s+/)[1].split(/\s+/);
         let matches = 0;
         for (let num of myNums) {
-            if (num === "") continue;
             if (cardNums.indexOf(num) >= 0) {
                 matches++;
             }
