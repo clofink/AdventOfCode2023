@@ -70,9 +70,15 @@
             solutionCell.style.color = 'red';
         }
 
+        function getDecemberDay() {
+            const currentDay = new Date();
+            if (currentDay.getMonth() === 11) return currentDay.getDate() <= 25 ? currentDay.getDate() : 25;
+            return 25;
+        }
+
         function addScripts() {
             const template = document.getElementById('tableRow');
-            for (let day = 1; day <= 25; day++) {
+            for (let day = 1; day <= getDecemberDay(); day++) {
                 for (let part = 1; part <= 2; part++) {
                     let scriptElem = document.createElement('script');
                     scriptElem.src = "/Day" + day + "Solution" + part + ".js"
