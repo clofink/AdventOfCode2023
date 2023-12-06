@@ -101,10 +101,10 @@ function day5Solution2(data) {
                     }
                 }
                 // high is within range
-                else if (rangeHigh <= range.srcHigh && rangeHigh > range.srcLow) {
+                // else if (rangeHigh <= range.srcHigh && rangeHigh > range.srcLow) {
                     // apparently unused??
-                    console.log("here")
-                }
+                //     console.log("here")
+                // }
                 // all ranges have been checked and it isn't in any
                 if (rangesChecked >= rangesToCheck) {
                     tempRanges.push([rangeLow, rangeHigh]);
