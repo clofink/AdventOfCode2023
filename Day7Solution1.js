@@ -44,7 +44,6 @@ function day7Solution1(data) {
     }
 
     let rankedHands = hands.toSorted(sortHands);
-    console.log(rankedHands);
 
     let total = 0;
     for (let i = 0; i < rankedHands.length; i++) {
