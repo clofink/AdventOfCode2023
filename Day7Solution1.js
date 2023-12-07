@@ -1,7 +1,7 @@
 function day7Solution1(data) {
     data = data.split("\n");
     const cardOrder = "AKQJT98765432";
-    const hands = {five: [], four: [], full: [], three: [], twoPair:[], pair: [], high: []}
+    const hands = []
     for (let line of data) {
         const handInfo = {};
         handInfo.hand = line.split(" ")[0];
@@ -12,40 +12,40 @@ function day7Solution1(data) {
             hand[char]++;
         }
         const counts = Object.values(hand)
-        let count2s = counts.join("").split("2").length - 1 || 0;
-        let count3s = counts.join("").split("3").length - 1 || 0;
-        let count4s = counts.join("").split("4").length - 1 || 0;
-        let count5s = counts.join("").split("5").length - 1 || 0;
-        // five of a kind
-        if (count5s === 1) {
-            hands.five.push(handInfo);
+
+        if (isFiveOfAKind(counts)) {
+            handInfo.handRank = 0;
+            hands.push(handInfo);
         }
-        else if (count4s === 1) {
-            hands.four.push(handInfo);
+        else if (isFourOfAKind(counts)) {
+            handInfo.handRank = 1;
+            hands.push(handInfo);
         }
-        else if (count3s === 1 && count2s === 1) {
-            hands.full.push(handInfo);
+        else if (isFullHouse(counts)) {
+            handInfo.handRank = 2;
+            hands.push(handInfo);
         }
-        else if (count3s === 1) {
-            hands.three.push(handInfo)
+        else if (isThreeOfAKind(counts)) {
+            handInfo.handRank = 3;
+            hands.push(handInfo)
         }
-        else if (count2s === 2) {
-            hands.twoPair.push(handInfo);
+        else if (isTwoPair(counts)) {
+            handInfo.handRank = 4;
+            hands.push(handInfo);
         }
-        else if (count2s === 1) {
-            hands.pair.push(handInfo);
+        else if (isPair(counts)) {
+            handInfo.handRank = 5;
+            hands.push(handInfo);
         }
         else {
-            hands.high.push(handInfo)
+            handInfo.handRank = 6;
+            hands.push(handInfo)
         }
     }
-    let rankedHands = [];
-    for (let type in hands) {
-        const sortedHands = hands[type].toSorted(sortHands)
-        rankedHands = rankedHands.concat(sortedHands);
-    }
-    rankedHands.reverse();
-    
+
+    let rankedHands = hands.toSorted(sortHands);
+    console.log(rankedHands);
+
     let total = 0;
     for (let i = 0; i < rankedHands.length; i++) {
         total += rankedHands[i].bid * (i + 1)
@@ -53,9 +53,30 @@ function day7Solution1(data) {
     return total;
 
     function sortHands(a, b) {
+        if (a.handRank < b.handRank) return 1
+        if (a.handRank > b.handRank) return -1;
         for (let i = 0; i<a.hand.length; i++) {
             if (a.hand[i] === b.hand[i]) continue;
-            return cardOrder.indexOf(a.hand[i]) - cardOrder.indexOf(b.hand[i]);
+            return cardOrder.indexOf(b.hand[i]) - cardOrder.indexOf(a.hand[i]);
         }
+    }
+
+    function isFiveOfAKind(counts) {
+        return counts.join("").split("5").length - 1 === 1;
+    }
+    function isFourOfAKind(counts) {
+        return counts.join("").split("4").length - 1 === 1;
+    }
+    function isFullHouse(counts) {
+        return counts.join("").split("2").length - 1 === 1 && counts.join("").split("3").length - 1 === 1;
+    }
+    function isThreeOfAKind(counts) {
+        return counts.join("").split("3").length - 1 === 1
+    }
+    function isTwoPair(counts) {
+        return counts.join("").split("2").length - 1 === 2
+    }
+    function isPair(counts) {
+        return counts.join("").split("2").length - 1 === 1
     }
 }
