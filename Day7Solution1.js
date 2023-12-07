@@ -11,9 +11,7 @@ function day7Solution1(data) {
             if (!hand[char]) hand[char] = 0;
             hand[char]++;
         }
-        const cards = Object.keys(hand);
         const counts = Object.values(hand)
-        let count1s = counts.join("").split("1").length - 1 || 0;
         let count2s = counts.join("").split("2").length - 1 || 0;
         let count3s = counts.join("").split("3").length - 1 || 0;
         let count4s = counts.join("").split("4").length - 1 || 0;
