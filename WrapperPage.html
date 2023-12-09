@@ -46,27 +46,15 @@
         </tr>
     </template>    
     <script>
-        async function runSolution(event) {
-            let buttonClicked = event.target;
-            let puzzle = buttonClicked.closest('tr').querySelector('.puzzle').innerText;
-            let fileName = 'Day' + puzzle.split('.')[0];
-            let buttons = buttonClicked.closest('tr').querySelectorAll('button');
-            if (buttonClicked == buttons[1]) {
-                fileName = fileName + 'Input.txt';
-            }
-            if (buttonClicked == buttons[0]) {
-                fileName = fileName + 'SampleInput.txt';
-            }
-            let input = await fetch(fileName);
+        async function runSolution(day, part, test) {
+            let input = await fetch(`Day${day}${test ? "Sample" : ""}Input.txt`);
             let inputData = await input.text();
-            let functionName = 'day' + puzzle.split('.')[0] + 'Solution' + puzzle.split('.')[1];
-            eval(`drawSolutionToTable(${functionName}(inputData), buttonClicked.closest('tr'))`);
+            drawSolutionToTable(`day${day}Solution${part}`, inputData, `${day}.${part}`);
         }
 
-        function drawSolutionToTable(result, tableRow) {
-            let solutionCells = tableRow.querySelectorAll('td');
-            let solutionCell = solutionCells[solutionCells.length - 1];
-            solutionCell.innerText = result;
+        function drawSolutionToTable(callback, data, id) {
+            let solutionCell = document.getElementById(id).closest('tr').cells[3]
+            solutionCell.innerText = window[callback](data);
             solutionCell.style.color = 'red';
         }
 
@@ -84,10 +72,10 @@
                     scriptElem.src = "/Day" + day + "Solution" + part + ".js"
                     document.head.appendChild(scriptElem);
                     let newTableRow = template.content.cloneNode(true);
+                    newTableRow.querySelector(".puzzle").setAttribute("id", `${day}.${part}`)
                     let buttons = newTableRow.querySelectorAll('button');
-                    for (let button of buttons) {
-                        button.addEventListener('click', runSolution);
-                    }
+                    buttons[0].setAttribute("onclick", `runSolution(${day}, ${part}, true)`);
+                    buttons[1].setAttribute("onclick", `runSolution(${day}, ${part}, false)`);
                     newTableRow.querySelector('.puzzle').innerText = day + '.' + part;
                     document.querySelector('tbody').appendChild(newTableRow);
                 }
