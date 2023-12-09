@@ -15,7 +15,6 @@ function day8Solution2(data) {
         if (parts[0][2] === "Z") endNodes.push(parts[0]);
         tree[parts[0]] = node;
     }
-    console.log(tree)
 
     const allLengths = [];
     for (let node of startNodes) {
@@ -36,7 +35,6 @@ function day8Solution2(data) {
             }
             currentStep++;
         }
-        console.log(`node ${node} took ${currentStep} steps at ${currentNodeName}`)
         allLengths.push(currentStep);
     }
     return leastCommonMultiple(allLengths);
