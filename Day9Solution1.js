@@ -7,25 +7,18 @@ function day9Solution1(data) {
         for (let num of numStrings) {
             nums.push(parseInt(num, 10));
         }
-        maxCount = 0;
         let layers = [[...nums]];
-        let newNums = structuredClone(nums)
-        while (!allZeroes(newNums)) {
-            maxCount++;
+        while (!allZeroes(nums)) {
             let tempNums = [];
-            for (let i = 1; i < newNums.length; i++) {
-                tempNums.push(newNums[i] - newNums[i-1])
+            for (let i = 1; i < nums.length; i++) {
+                tempNums.push(nums[i] - nums[i-1])
             }
             layers.push([...tempNums]);
-            newNums = tempNums
+            nums = tempNums
         }
-        layers.reverse();
         let value = 0;
-        let allVal = [0]
-        for (let i = 1; i < layers.length; i++) {
-            let lastValOfLayer = layers[i][layers[i].length - 1];
-            value += lastValOfLayer;
-            allVal.push(value)
+        for (let i = layers.length - 2; i >= 0; i--) {
+            value += layers[i][layers[i].length - 1];
         }
         total += value;
     }
