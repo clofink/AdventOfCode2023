@@ -1,7 +1,7 @@
 function day7Solution2(data) {
     data = data.split("\n");
     const cardOrder = "AKQT98765432J";
-    const hands = {five: [], four: [], full: [], three: [], twoPair:[], pair: [], high: []}
+    const hands = []
     for (let line of data) {
         const handInfo = {};
         handInfo.hand = line.split(" ")[0];
@@ -20,7 +20,6 @@ function day7Solution2(data) {
         let count5s = counts.join("").split("5").length - 1 || 0;
         let countJs = handInfo.hand.split("J").length - 1 || 0;
         
-        // five of a kind
         if (
             (count5s === 1) || 
             (count4s === 1 && countJs === 1) ||
@@ -28,66 +27,63 @@ function day7Solution2(data) {
             (count2s === 1 && countJs === 3) ||
             (countJs >= 4)
         ) {
-            hands.five.push(handInfo);
+            handInfo.handRank = 0;
+            hands.push(handInfo);
         }
-        // four of a kind
         else if (
             (count4s === 1) ||
             (count3s === 1 && countJs === 1) ||
             (count2s === 1 && countJs === 2) ||
             (countJs === 3)
         ) {
-            hands.four.push(handInfo);
+            handInfo.handRank = 1;
+            hands.push(handInfo);
         }
-        // full house
         else if (
             (count3s === 1 && count2s === 1) ||
             (count2s === 2 && countJs === 1)
         ) {
-            hands.full.push(handInfo);
+            handInfo.handRank = 2;
+            hands.push(handInfo);
         }
-        // three of a kind
         else if (
             (count3s === 1) ||
             (count2s === 1 && countJs === 1) ||
             (countJs === 2)
         ) {
-            hands.three.push(handInfo)
+            handInfo.handRank = 3;
+            hands.push(handInfo)
         }
-        // two pair
         else if (count2s === 2) {
-            hands.twoPair.push(handInfo);
+            handInfo.handRank = 4;
+            hands.push(handInfo);
         }
-        // pair
         else if (
             (count2s === 1) || 
             (countJs === 1)
         ) {
-            hands.pair.push(handInfo);
+            handInfo.handRank = 5;
+            hands.push(handInfo);
         }
-        // high card
         else {
-            hands.high.push(handInfo)
+            handInfo.handRank = 6;
+            hands.push(handInfo)
         }
     }
-    let rankedHands = [];
-    for (let type in hands) {
-        const sortedHands = hands[type].toSorted(sortHands)
-        rankedHands = rankedHands.concat(sortedHands);
-    }
-    rankedHands.reverse();
+    hands.sort(sortHands)
 
     let total = 0;
-    for (let i = 0; i < rankedHands.length; i++) {
-        total += rankedHands[i].bid * (i + 1)
+    for (let i = 0; i < hands.length; i++) {
+        total += hands[i].bid * (i + 1)
     }
     return total;
 
     function sortHands(a, b) {
+        if (a.handRank < b.handRank) return 1
+        if (a.handRank > b.handRank) return -1;
         for (let i = 0; i<a.hand.length; i++) {
             if (a.hand[i] === b.hand[i]) continue;
-            return cardOrder.indexOf(a.hand[i]) - cardOrder.indexOf(b.hand[i]);
+            return cardOrder.indexOf(b.hand[i]) - cardOrder.indexOf(a.hand[i]);
         }
     }
-
 }
